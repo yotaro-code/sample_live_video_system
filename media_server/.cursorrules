@@ -1,0 +1,10 @@
+# Rule: Flutterクライアントでライブ映像を再生するためのローカル配信サーバ構築
+
+## 背景:
+FlutterでHLS形式（.m3u8）のライブ映像を再生するアプリを開発・検証するために、ローカル環境にRTMPを受信してHLSに変換できる配信サーバを用意する必要がある。OBS StudioからRTMPで映像を送り、Flutterアプリでそれをリアルタイム視聴する構成である。
+
+## 使用ツール:
+- Docker
+- nginx-rtmp-module（Dockerイメージ使用）
+- OBS Studio（配信者側）
+- Flutterアプリ（視聴者側）

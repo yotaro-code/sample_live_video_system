@@ -1,0 +1,30 @@
+# Rule: nginx-rtmp サーバから HLS 形式で配信されたライブ映像（ストリームキー:test）を Flutter Web アプリで再生する
+
+## 背景:
+別プロジェクト（media_server）で構築された Docker 上の nginx-rtmp サーバが、OBS からストリームキー「test」でRTMP映像を受信し、それを HLS (.m3u8) に変換して http://localhost:8080/hls/test.m3u8 にて配信している。この Flutter プロジェクトでは、その映像を Flutter Web アプリで再生できるようにする。今回は Flutter Web 環境での動作確認を重視する。
+
+## 前提構成:
+- サーバー: `nginx-rtmp` (Docker)
+- ストリームキー: `test`
+- 配信URL: `http://localhost:8080/hls/test.m3u8`
+- 再生形式: HLS（.m3u8）
+- Flutter プロジェクトと nginx プロジェクトは別ディレクトリに存在
+- Flutter Web（`flutter build web` / `flutter run -d chrome`）での動作確認を主目的とする
+
+## 要件:
+1. Flutter Web アプリで `http://localhost:8080/hls/test.m3u8` を HLS 再生できる画面を作成する
+2. HLS 再生には `better_player` または `video_player` を使用する（Web対応が必要）
+3. アプリ起動時に自動で再生を開始する
+4. Webブラウザ（Chromeなど）上で HLS 映像が正常に再生されることを確認する
+5. Web再生に必要な CORS 対策（`Access-Control-Allow-Origin: *`）はサーバ側で設定済みとする
+
+## 参考コード（構成イメージ）:
+- `main.dart` で `VideoPlayerPage` を表示
+- HLS再生処理を `BetterPlayer` または Web対応 `video_player` で実装
+- 再生URL: `http://localhost:8080/hls/test.m3u8`
+
+## 注意点:
+- Flutter Web 実行時は「localhost:8080」と同一オリジンを意識する（127.0.0.1ではCORSエラーになる可能性あり）
+- `.m3u8` が生成されていない状態では再生できないため、OBSからの配信が必要
+- better_player を使用する場合、Web未対応のため代替実装が必要になる場合あり（`video_player` + `chewie` 推奨）
+

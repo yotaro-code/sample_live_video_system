@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  nginx-rtmp:
+    build: .
+    ports:
+      - "1935:1935" # RTMPポート
+      - "8080:8080" # HTTPポート（HLS配信用）
+    volumes:
+      - ./hls:/var/www/hls # HLSファイルの永続化
